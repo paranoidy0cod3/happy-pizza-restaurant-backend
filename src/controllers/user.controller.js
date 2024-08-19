@@ -24,9 +24,10 @@ const generateAccessAndRefreshTokens = async (userId) => {
 };
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { fullName, email, password } = req.body;
+  const { name, email, password } = req.body;
+  const username = name.split(" ")[0];
 
-  if ([fullName, email, password].some((field) => field?.trim() === "")) {
+  if ([name, email, password].some((field) => field?.trim() === "")) {
     throw new ApiError(400, "All fields are required!");
   }
   const existedUser = await User.findOne({ $or: [{ username }, { email }] });
@@ -36,8 +37,8 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   const user = await User.create({
-    fullName,
-    username: fullName.split(" ")[0],
+    fullName: name,
+    username,
     email,
     password,
   });
@@ -74,9 +75,7 @@ const loginUser = asyncHandler(async (req, res) => {
     user._id
   );
 
-  const loggedInUser = await User.findById(user._id).select(
-    "-password -refreshToken"
-  );
+  const loggedInUser = await User.findById(user._id).select("-password");
 
   return res
     .status(200)
@@ -161,6 +160,12 @@ const resetPassword = asyncHandler(async (req, res) => {
     );
 });
 
+const getCurrentUser = asyncHandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(new ApiResponse(200, req.user, "User fetched successfully"));
+});
+
 const verifyOtp = asyncHandler(async (req, res) => {
   const { otp, newPassword } = req.body;
   if (!otp && !newPassword) {
@@ -184,4 +189,11 @@ const verifyOtp = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { user }, "reset new password successfully!"));
 });
 
-export { registerUser, loginUser, logoutUser, resetPassword, verifyOtp };
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  resetPassword,
+  getCurrentUser,
+  verifyOtp,
+};

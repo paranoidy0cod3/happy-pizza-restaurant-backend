@@ -20,6 +20,8 @@ app.use(cookieParser());
 
 //Routes import
 import userRouter from "./routes/user.route.js";
+import cartRouter from "./routes/cart.route.js";
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/cart", cartRouter);
 
 export { app };

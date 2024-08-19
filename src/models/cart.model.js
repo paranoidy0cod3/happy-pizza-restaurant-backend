@@ -1,12 +1,12 @@
 import mongoose, { Schema } from "mongoose";
 
-const foodSchema = new Schema(
+const cartSchema = new Schema(
   {
     id: Number,
     name: String,
     price: Number,
     totalPrice: Number,
-    qty: Number,
+    quantity: Number,
     rating: Number,
     image: String,
     userId: String,
@@ -14,4 +14,4 @@ const foodSchema = new Schema(
   { timestamps: true }
 );
 
-export const Food = mongoose.model("Food", foodSchema);
+export const Cart = mongoose.model("Cart", cartSchema);
