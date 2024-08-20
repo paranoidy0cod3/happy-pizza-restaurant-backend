@@ -3,6 +3,7 @@ import { ApiError } from "../utils/apiError.js";
 import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 import nodemailer from "nodemailer";
 
@@ -168,11 +169,12 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 
 const verifyOtp = asyncHandler(async (req, res) => {
   const { otp, newPassword } = req.body;
+
   if (!otp && !newPassword) {
     throw new ApiError(401, "new password/otp is reqired!");
   }
 
-  const securePassword = User.generateNewHashPassword(newPassword);
+  const securePassword = await bcrypt.hash(newPassword, 10);
 
   const user = await User.findOneAndUpdate(
     { otp },
