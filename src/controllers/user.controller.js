@@ -78,11 +78,12 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const loggedInUser = await User.findById(user._id).select("-password");
   const options = {
-    httpOnly: true, // Prevents JavaScript access to the cookie
-    secure: process.env.NODE_ENV === "production", // Ensures cookie is only sent over HTTPS
-    sameSite: "None", // Allows cross-site cookie usage
-    maxAge: 24 * 60 * 60 * 1000, // Optional: Set cookie expiration (1 day in this case)
-    path: "/", // Ensure the cookie is available for all routes
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "None",
+    maxAge: 24 * 60 * 60 * 1000,
+    path: "/", // Make sure the cookie is available throughout the site
+    domain: process.env.FRONTEND_DOMAIN, // Optional: Specify the domain if necessary
   };
   return res
     .status(200)
