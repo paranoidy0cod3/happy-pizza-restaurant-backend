@@ -8,8 +8,8 @@ app.use(
   cors({
     origin: process.env.FRONTEND_DOMAIN,
     credentials: true,
-    methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
-    allowedHeaders: "Authorization, Content-Type",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: "Authorization,Content-Type",
   })
 );
 
