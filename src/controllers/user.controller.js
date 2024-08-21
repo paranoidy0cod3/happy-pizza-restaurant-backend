@@ -80,7 +80,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true, // Cookie is only accessible by the web server
     secure: true, // Use secure cookies in production (requires HTTPS)
-    sameSite: "Lax", // Adjust as needed: 'Lax', 'Strict', or 'None'
+    sameSite: "None", // Adjust as needed: 'Lax', 'Strict', or 'None'
     // 1 day expiration (adjust as needed)
   };
   return res
