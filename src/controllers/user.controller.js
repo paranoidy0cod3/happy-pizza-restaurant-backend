@@ -77,16 +77,17 @@ const loginUser = asyncHandler(async (req, res) => {
   );
 
   const loggedInUser = await User.findById(user._id).select("-password");
-  // const options = {
-  //   httpOnly: true, // Cookie is only accessible by the web server
-  //   secure: process.env.NODE_ENV === "production", // Use secure cookies in production (requires HTTPS)
-  //   sameSite: "None", // Adjust as needed: 'Lax', 'Strict', or 'None'
-  //   // 1 day expiration (adjust as needed)
-  // };
+  const options = {
+    httpOnly: true, // Prevents JavaScript access to the cookie
+    secure: process.env.NODE_ENV === "production", // Ensures cookie is only sent over HTTPS
+    sameSite: "None", // Allows cross-site cookie usage
+    maxAge: 24 * 60 * 60 * 1000, // Optional: Set cookie expiration (1 day in this case)
+    path: "/", // Ensure the cookie is available for all routes
+  };
   return res
     .status(200)
-    .cookie("accessToken", accessToken)
-    .cookie("refreshToken", refreshToken)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
     .json(
       new ApiResponse(
         200,
@@ -167,9 +168,10 @@ const resetPassword = asyncHandler(async (req, res) => {
 });
 
 const getCurrentUser = asyncHandler(async (req, res) => {
+  const user = req.user;
   return res
     .status(200)
-    .json(new ApiResponse(200, req.user, "User fetched successfully"));
+    .json(new ApiResponse(200, user, "User fetched successfully"));
 });
 
 const verifyOtp = asyncHandler(async (req, res) => {
