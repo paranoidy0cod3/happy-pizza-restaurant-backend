@@ -80,8 +80,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "Lax",
-    maxAge: 24 * 60 * 60 * 1000,
+
     path: "/", // Make sure the cookie is available throughout the site
     domain: process.env.FRONTEND_DOMAIN, // Optional: Specify the domain if necessary
   };
